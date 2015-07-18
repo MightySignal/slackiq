@@ -1,0 +1,1 @@
+require './slack-sidekiq/slack_sidekiq'
