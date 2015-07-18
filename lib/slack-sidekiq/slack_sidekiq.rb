@@ -8,9 +8,14 @@ class SlackSidekiq
       @@webhook_url = options[:webhook_url]
     end
     
-    def hook
-      @@webhook_url
+    def post
+      text = 'sample data'
+  
+      json = {text: text}.to_json
+      HTTParty.post(@@webhook_url, body: json)
     end
+    
+    
     
   end
   
