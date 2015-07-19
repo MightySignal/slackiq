@@ -22,16 +22,9 @@ class SlackSidekiq
         {
             "fallback" => "Required plain-text summary of the attachment.",
 
-            "color" => "#36a64f",
+            "color" => "#00ff66",
 
-            "pretext" => "Optional text that appears above the attachment block",
-
-            "author_name" => "Bobby Tables",
-            "author_link" => "http://flickr.com/bobby/",
-            "author_icon" => "http://flickr.com/icons/bobby.jpg",
-
-            "title" => "Slack API Documentation",
-            "title_link" => "https://api.slack.com/",
+            "title" => "Sidekiq Batch Completed",
 
             "text" => "Optional text that appears within the attachment",
 
@@ -48,9 +41,9 @@ class SlackSidekiq
         }
     ]
     
-      body = {text: text, attachments: attachments}.to_json
+      body = {attachments: attachments}.to_json
       
-      HTTParty.post(@@webhook_url, body: body, attachments: attachments)
+      HTTParty.post(@@webhook_url, body: body)
   end
     
     
