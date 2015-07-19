@@ -36,6 +36,11 @@ class SlackSidekiq
               "short" => true
             },
             {
+              "title" => "Completed at",
+              "value" => "2/25/2015 at 12:12 pm",
+              "short" => true
+            },
+            {
               "title" => "Duration",
               "value" => "23:24:12",
               "short" => true
