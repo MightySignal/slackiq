@@ -50,6 +50,11 @@ class SlackSidekiq
               "value" => "1002",
               "short" => true
             },
+            {
+              "title" => "Failure %",
+              "value" => "3.02%",
+              "short" => true
+            },
           ],
 
           "image_url" => "http://my-website.com/path/to/image.jpg",
