@@ -20,24 +20,40 @@ class SlackSidekiq
       attachments = 
       [
         {
-            "fallback" => "Required plain-text summary of the attachment.",
+          "fallback" => "Required plain-text summary of the attachment.",
 
-            "color" => "#00ff66",
+          "color" => "#00ff66",
 
-            "title" => "Sidekiq Batch Completed",
+          "title" => "Sidekiq Batch Completed",
 
-            "text" => "Optional text that appears within the attachment",
+          "text" => "<Put batch description here>",
 
-            "fields" => [
-                {
-                    "title" => "Priority",
-                    "value" => "High",
-                    "short" => false
-                }
-            ],
+          "fields" => 
+          [
+            {
+              "title" => "Created at",
+              "value" => "2/24/2015 at 12:12 pm",
+              "short" => true
+            },
+            {
+              "title" => "Duration",
+              "value" => "23:24:12",
+              "short" => true
+            },
+            {
+              "title" => "Total Jobs",
+              "value" => "124129129",
+              "short" => true
+            },
+            {
+              "title" => "Failures",
+              "value" => "1002",
+              "short" => true
+            },
+          ],
 
-            "image_url" => "http://my-website.com/path/to/image.jpg",
-            "thumb_url" => "http://example.com/path/to/thumb.png"
+          "image_url" => "http://my-website.com/path/to/image.jpg",
+          "thumb_url" => "http://example.com/path/to/thumb.png"
         }
     ]
     
