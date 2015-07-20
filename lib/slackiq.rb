@@ -1,0 +1,1 @@
+require './slackiq/slackiq'

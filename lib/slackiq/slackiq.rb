@@ -2,7 +2,7 @@ require 'net/http'
 require 'json'
 require 'httparty'
 
-class SlackSidekiq
+class Slackiq
   
   class << self
     
