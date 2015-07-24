@@ -80,7 +80,7 @@ class Slackiq
     
       body = {attachments: attachments}.to_json
       
-      HTTParty.post(@@webhook_url, body: body)
+      HTTParty.post(url, body: body)
     end
     
  
