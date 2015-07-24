@@ -1,1 +1,1 @@
-require './slackiq/main'
+require './slackiq/main.rb'
