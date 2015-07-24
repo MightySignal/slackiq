@@ -18,8 +18,8 @@ class Slackiq
     def notify(webhook_url_name, description, status, extra_fields={})
       url = @@webhook_urls[webhook_url_name]
       
-      created_at = status.created_at
-      finished_at = DateTime.now
+      # created_at = status.created_at
+      # finished_at = DateTime.now
       
       fields =  [
                   {
