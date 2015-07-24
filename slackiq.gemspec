@@ -7,5 +7,5 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split($/)
   s.require_paths = ["lib"]
   s.homepage      = 'https://github.com/MightySignal/slackiq'
-  s.add_dependency 'httparty', '0.13.5'
+  s.add_dependency 'httparty'
 end
