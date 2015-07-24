@@ -21,8 +21,6 @@ class Slackiq
       created_at = status.created_at
       finished_at = DateTime.now
       
-      duration = 
-      
       fields =  [
                   {
                     "title" => "Created at",
