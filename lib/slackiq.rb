@@ -39,13 +39,13 @@ module Slackiq
       
       fields =  [
                   {
-                    "title" => "Created at",
-                    "value" => created_at,
+                    "title" => "Created",
+                    "value" => created_at.strftime('%D @ %r'),
                     "short" => true
                   },
                   {
-                    "title" => "Completed at",
-                    "value" => completed_at,
+                    "title" => "Completed",
+                    "value" => completed_at.strftime('%D @ %r'),
                     "short" => true
                   },
                   {
