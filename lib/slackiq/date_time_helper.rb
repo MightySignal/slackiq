@@ -1,7 +1,7 @@
 require 'date'
 
 module Slackiq
-  module DateTime
+  module DateTimeHelper
 
     def elapsed_time_humanized(dt0, dt1)
       humanize(elasped_seconds(dt0, dt1))
