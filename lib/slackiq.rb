@@ -18,38 +18,49 @@ module Slackiq
     def notify(webhook_url_name, description, status, extra_fields={})
       url = @@webhook_urls[webhook_url_name]
       
-      # created_at = status.created_at
-      # finished_at = DateTime.now
+      if status
+        created_at = status.created_at
+      
+        if created_at
+          completed_at = DateTime.now
+          duration = Slackiq::DateTimeHelper.elapsed_time_humanized(created_at, completed_at)
+        end
+      
+        total_jobs = status.total
+        failures = status.failures
+      
+        failure_percentage = (failures/total_jobs.to_f)*100 if total_jobs && failures
+      end
       
       fields =  [
                   {
                     "title" => "Created at",
-                    "value" => "2/24/2015 at 12:12 pm",
+                    "value" => created_at,
                     "short" => true
                   },
                   {
                     "title" => "Completed at",
-                    "value" => "2/25/2015 at 12:12 pm",
+                    "value" => completed_at,
                     "short" => true
                   },
                   {
                     "title" => "Duration",
-                    "value" => "23:24:12",
+                    "value" => duration,
                     "short" => true
                   },
                   {
                     "title" => "Total Jobs",
-                    "value" => "124129129",
+                    "value" => total_jobs,
                     "short" => true
                   },
                   {
                     "title" => "Failures",
-                    "value" => "1002",
+                    "value" => status.failures,
                     "short" => true
                   },
                   {
                     "title" => "Failure %",
-                    "value" => "3.02%",
+                    "value" => "#{failure_percentage}%",
                     "short" => true
                   },
                 ]
