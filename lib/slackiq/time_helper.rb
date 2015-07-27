@@ -1,7 +1,7 @@
 require 'date'
 
 module Slackiq
-  module DateTimeHelper
+  module TimeHelper
 
     class << self
     
@@ -23,6 +23,10 @@ module Slackiq
             "#{n.to_i}#{name}"
           end
         }.compact.reverse.join(' ')
+      end
+      
+      def format(time)
+        time.created_at.strftime('%D @ %r').gsub('PM', 'pm').gsub('AM', 'am')
       end
   
     

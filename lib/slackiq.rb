@@ -4,7 +4,7 @@ require 'net/http'
 require 'json'
 require 'httparty'
 
-require 'slackiq/date_time_helper'
+require 'slackiq/time_helper'
 
 require 'active_support/core_ext' #for Hash#except
 
@@ -19,6 +19,7 @@ module Slackiq
     
     def notify(options={})  
       url = @@webhook_urls[options[:webhook_name]]
+      title = options[:title]
       description = options[:description]
       status = options[:status]
       extra_fields = options.except(:webhook_name, :description, :status)
@@ -28,7 +29,7 @@ module Slackiq
       
         if created_at
           completed_at = Time.now
-          duration = Slackiq::DateTimeHelper.elapsed_time_humanized(created_at, completed_at)
+          duration = Slackiq::TimeHelper.elapsed_time_humanized(created_at, completed_at)
         end
       
         total_jobs = status.total
@@ -40,12 +41,12 @@ module Slackiq
       fields =  [
                   {
                     "title" => "Created",
-                    "value" => created_at.strftime('%D @ %r'),
+                    "value" => Slackiq::TimeHelper.format(created_at),
                     "short" => true
                   },
                   {
                     "title" => "Completed",
-                    "value" => completed_at.strftime('%D @ %r'),
+                    "value" => Slackiq::TimeHelper.format(completed_at),
                     "short" => true
                   },
                   {
@@ -86,7 +87,7 @@ module Slackiq
 
           'color' => '#00ff66',
 
-          'title' => 'Sidekiq Batch Completed',
+          'title' => title,
 
           'text' => description,
 
