@@ -1,3 +1,3 @@
-module Slackiq
+class Slackiq
   VERSION = "0.0.0"
 end

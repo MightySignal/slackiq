@@ -87,10 +87,6 @@ class Slackiq
       HTTParty.post(url, body: body)
     end
     
- 
-    
-    
-    
   end
   
 end
