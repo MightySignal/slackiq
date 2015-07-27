@@ -6,13 +6,9 @@ require 'httparty'
 
 require 'slackiq/date_time_helper'
 
-class Slackiq
+module Slackiq
   
   class << self
-    
-    # def configure(options={})
-    #   @@webhook_url = options[:webhook_url]
-    # end
     
     def configure(webhook_urls={})
       raise 'Argument must be a Hash' unless webhook_urls.class == Hash
