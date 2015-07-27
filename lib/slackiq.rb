@@ -6,6 +6,8 @@ require 'httparty'
 
 require 'slackiq/date_time_helper'
 
+require 'active_support/core_ext' #for Hash#except
+
 module Slackiq
   
   class << self
@@ -15,8 +17,11 @@ module Slackiq
       @@webhook_urls = webhook_urls
     end
     
-    def notify(webhook_url_name, description, status, extra_fields={})
-      url = @@webhook_urls[webhook_url_name]
+    def notify(options={})  
+      url = @@webhook_urls[options[:webhook_name]]
+      description = options[:description]
+      status = options[:status]
+      extra_fields = options.except(:webhook_name, :description, :status)
       
       if status
         created_at = status.created_at
