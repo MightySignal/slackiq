@@ -1,28 +1,26 @@
-# Slackiq
+# Slackiq (UNDER CONSTRUCTION. DO NOT INSTALL YET!)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/slackiq`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Slackiq integrates Slack and Sidekiq Pro so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+If you're using Bundler, add this line to your Gemfile:
 
-```ruby
-gem 'slackiq'
+`gem 'slackiq'`
+
+If not, install it manually:
+
+`gem install slackiq`
+
+## Configuration
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install slackiq
+Slackiq.configure( main_channel: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND', 
+                   another_channel: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22424', 
+                   a_third_channel: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/asf124ASKJHFSAF23')
+```
 
 ## Usage
 
-TODO: Write usage instructions here
 
 ## Development
 
@@ -32,7 +30,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/slackiq. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/MightySignal/slackiq. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License
