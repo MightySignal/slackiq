@@ -26,7 +26,7 @@ module Slackiq
       end
       
       def format(time)
-        time.created_at.strftime('%D @ %r').gsub('PM', 'pm').gsub('AM', 'am')
+        time.strftime('%D @ %r').gsub('PM', 'pm').gsub('AM', 'am')
       end
   
     
