@@ -5,11 +5,13 @@ module Slackiq
 
     class << self
     
-      def elapsed_time_humanized(dt0, dt1)
-        humanize(elasped_seconds(dt0, dt1))
+      def elapsed_time_humanized(t0, t1)
+        humanize(elapsed_seconds(t0, t1))
       end
   
-      def elasped_seconds(dt0, dt1)
+      def elapsed_seconds(t0, t1)
+        dt0 = t0.to_datetime
+        dt1 = t1.to_datetime
         ((dt1-dt0)*24*60*60).to_i
       end
   
