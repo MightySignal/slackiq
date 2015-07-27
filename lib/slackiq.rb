@@ -27,7 +27,7 @@ module Slackiq
         created_at = status.created_at
       
         if created_at
-          completed_at = DateTime.now
+          completed_at = Time.now
           duration = Slackiq::DateTimeHelper.elapsed_time_humanized(created_at, completed_at)
         end
       
