@@ -22,7 +22,7 @@ module Slackiq
       title = options[:title]
       description = options[:description]
       status = options[:status]
-      extra_fields = options.except(:webhook_name, :description, :status)
+      extra_fields = options.except(:webhook_name, :title, :description, :status)
       
       if status
         created_at = status.created_at
