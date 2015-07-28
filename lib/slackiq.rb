@@ -28,13 +28,17 @@ module Slackiq
         created_at = status.created_at
       
         if created_at
-          completed_at = Time.now
-          duration = Slackiq::TimeHelper.elapsed_time_humanized(created_at, completed_at)
+          time_now = Time.now
+          duration = Slackiq::TimeHelper.elapsed_time_humanized(created_at, time_now)
+          time_now_title = (status.complete ? 'Completed' : 'Now')
         end
       
         total_jobs = status.total
         failures = status.failures
+        jobs_run = total_jobs - status.pending
       
+        completion_percentage = jobs_run/total_jobs.to_f
+        
         failure_percentage = (failures/total_jobs.to_f)*100 if total_jobs && failures
       end
       
@@ -45,8 +49,8 @@ module Slackiq
                     "short" => true
                   },
                   {
-                    "title" => "Completed",
-                    "value" => Slackiq::TimeHelper.format(completed_at),
+                    "title" => time_now_title,
+                    "value" => Slackiq::TimeHelper.format(time_now),
                     "short" => true
                   },
                   {
@@ -57,6 +61,16 @@ module Slackiq
                   {
                     "title" => "Total Jobs",
                     "value" => total_jobs,
+                    "short" => true
+                  },
+                  {
+                    "title" => "Jobs Run",
+                    "value" => jobs_run,
+                    "short" => true
+                  },
+                  {
+                    "title" => "Completion %",
+                    "value" => completion_percentage,
                     "short" => true
                   },
                   {
