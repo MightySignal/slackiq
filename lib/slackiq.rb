@@ -30,7 +30,7 @@ module Slackiq
         if created_at
           time_now = Time.now
           duration = Slackiq::TimeHelper.elapsed_time_humanized(created_at, time_now)
-          time_now_title = (status.complete ? 'Completed' : 'Now')
+          time_now_title = (status.complete? ? 'Completed' : 'Now')
         end
       
         total_jobs = status.total
