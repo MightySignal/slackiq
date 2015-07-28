@@ -119,16 +119,19 @@ module Slackiq
     def notify_on(on, batch, &block)
       raise 'First argument must be :success or :complete' unless [:success, :complete].include?(on)
       
-      batch.on(on, self, block: block)
+      batch.on(on, BatchHandler, block: block)
     end
     
   end
   
+  class BatchHandler
   
-  def on_complete(status, options)
-    attributes = options[:block].call(status)
+    def on_complete(status, options)
+      attributes = options[:block].call(status)
     
-    Slackiq.notify({status: status}.merge(attributes))
+      Slackiq.notify({status: status}.merge(attributes))
+    end
+  
   end
   
 end
