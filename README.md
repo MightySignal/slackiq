@@ -31,14 +31,36 @@ The `notify` method has a single Hash parameter. Here are the keys and values in
 * `:status` An instance of `Sidekiq::Batch::Status`
 * Any other keys and values (both Strings) can be added too, and they'll be added to notification too.
 
-Here's how you would use Slackiq to send a notification to your Slack when your Sidekiq batch completes:
+Here's an example showing how you would use Slackiq to send a notification to your Slack when your Sidekiq batch completes:
 
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```
+class WebScraper
+  
+  class << self
+  
+    # Scrape the first 100 URLs in the database
+    def scrape_100
+      batch = Sidekiq::Batch.new
+      batch.description = 'Scrape the first 100 URLs!' 
+      batch.on(:complete, self)
+      
+      batch.jobs do
+        
+      urls = Url.limit(100) # Url is a Rails model in this case
+      
+      urls.each do |url|
+        ScraperWorker.perform_async(url.id)
+      end
+    end
+  
+  end
+  
+  def on_complete(status, options)
+    Slackiq.notify(webhook_name: :web_scrapes, status: status, title: 'Scrape Completed!', 'Total URLs in DB' => URL.count.to_s, 'Servers' => "#{Server.active_count} active, #{Server.inactive_count} inactive" )
+  end
+  
+end
+```
 
 ## Contributing
 
