@@ -115,7 +115,22 @@ module Slackiq
       
       HTTParty.post(url, body: body)
     end
+  
+    def notify_on(on, batch, &block)
+      raise 'First argument must be :success or :complete' unless [:success, :complete].include?(on)
+      
+      batch.on(on, self, block: block)
+    end
     
+  end
+  
+  
+  def on_complete(status, options)
+    attributes = options[:block].call(status)
+    
+    extra_attributes = attributes.except(:webhook_name, :title)
+    
+    Slackiq.notify({webhook_name: attributes[:webhook_name], title: attributes[:title], status: status}.merge(extra_attributes))
   end
   
 end
