@@ -2,7 +2,7 @@
 
 Slackiq integrates [Slack](https://slack.com/) and [Sidekiq Pro](http://sidekiq.org/pro/) so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
 
-![demo](http://i.imgur.com/YePlm9Z.gif)
+![demo](http://i.imgur.com/4NLq2rP.gif)
 
 ## Installation
 
