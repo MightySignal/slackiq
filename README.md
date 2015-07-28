@@ -1,16 +1,14 @@
 # Slackiq (UNDER CONSTRUCTION. DO NOT INSTALL YET!)
 
-Slackiq integrates Slack and Sidekiq Pro so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
+Slackiq integrates [Slack](https://slack.com/) and [Sidekiq Pro](http://sidekiq.org/pro/) so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
+
+<Insert Graphic>
 
 ## Installation
 
-If you're using Bundler, add this line to your Gemfile:
+Add this line to your Gemfile:
 
 `gem 'slackiq'`
-
-If not, install it manually:
-
-`gem install slackiq`
 
 ## Configuration
 ```
