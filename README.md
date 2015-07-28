@@ -13,7 +13,8 @@ Add this line to your Gemfile:
 ## Configuration
 
 1. Set up any number of Slack Incoming Webhooks [from your Slack](https://slack.com/services/new/incoming-webhook).
-2. Call `Slackiq.configure` when your application launches to configure all of the webhooks that you want to post to. If you're using Rails, create an initializer at `config/initializers/slackiq.rb`. The configuration code is:
+
+2. Call the code below when your application launches to configure all of the webhooks to which you will post. If you're using Rails, create an initializer at `config/initializers/slackiq.rb`. Here's the configuration code:
 
 ```
 Slackiq.configure( main: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND', 
