@@ -14,14 +14,24 @@ Add this line to your Gemfile:
 
 First, set up any number of Slack Incoming Webhooks [from your Slack](https://slack.com/services/new/incoming-webhook).
 
-Then, you only need to call the `Slackiq::configure` method when your application launches to configure all of the webhooks to which you want to post. If you're using Rails, create an initializer at `config/initializers/slackiq.rb`. Here's an example:
+Then, you only need to call the `configure` method when your application launches to configure all of the webhooks to which you want to post. If you're using Rails, create an initializer at `config/initializers/slackiq.rb`. Here's an example:
 
 ```
-Slackiq.configure( main: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND', 
-                   another_key: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423')
+Slackiq.configure( web_scrapes: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND', 
+                   data_processing: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423')
 ```
 
 ## Usage
+
+You can call `notify` to send a nicely-formatted notification to your Slack.
+
+The `notify` method has a single Hash parameter. Here are the keys and values in the Hash:
+* `:webhook_name` The name of the webhook (Symbol) that you configured (eg. `:main` or `:data_processing`)
+* `:title` The title of the notification (String)
+* `:status` An instance of `Sidekiq::Batch::Status`
+* Any other keys and values (both Strings) can be added too, and they'll be added to notification too.
+
+Here's how you would use Slackiq to send a notification to your Slack when your Sidekiq batch completes:
 
 
 ## Development
