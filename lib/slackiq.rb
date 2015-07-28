@@ -128,9 +128,7 @@ module Slackiq
   def on_complete(status, options)
     attributes = options[:block].call(status)
     
-    extra_attributes = attributes.except(:webhook_name, :title)
-    
-    Slackiq.notify({webhook_name: attributes[:webhook_name], title: attributes[:title], status: status}.merge(extra_attributes))
+    Slackiq.notify({status: status}.merge(attributes))
   end
   
 end
