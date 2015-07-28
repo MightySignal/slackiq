@@ -115,23 +115,7 @@ module Slackiq
       
       HTTParty.post(url, body: body)
     end
-  
-    def notify_on(on, batch, &block)
-      raise 'First argument must be :success or :complete' unless [:success, :complete].include?(on)
-      
-      batch.on(on, BatchHandler, block: block)
-    end
     
-  end
-  
-  class BatchHandler
-  
-    def on_complete(status, options)
-      attributes = options[:block].call(status)
-    
-      Slackiq.notify({status: status}.merge(attributes))
-    end
-  
   end
   
 end
