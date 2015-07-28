@@ -20,7 +20,7 @@ module Slackiq
     def notify(options={})  
       url = @@webhook_urls[options[:webhook_name]]
       title = options[:title]
-      description = options[:description]
+      #description = options[:description]
       status = options[:status]
       extra_fields = options.except(:webhook_name, :title, :description, :status)
       
@@ -40,6 +40,8 @@ module Slackiq
         completion_percentage = (jobs_run/total_jobs.to_f)*100
         
         failure_percentage = (failures/total_jobs.to_f)*100 if total_jobs && failures
+        
+        description = status.description
       end
       
       fields =  [
@@ -70,7 +72,7 @@ module Slackiq
                   },
                   {
                     "title" => "Completion %",
-                    "value" => completion_percentage,
+                    "value" => "#{completion_percentage}%",
                     "short" => true
                   },
                   {
