@@ -56,11 +56,15 @@ class WebScraper
   end
   
   def on_complete(status, options)
-    Slackiq.notify(webhook_name: :web_scrapes, status: status, title: 'Scrape Completed!', 'Total URLs in DB' => URL.count.to_s, 'Servers' => "#{Server.active_count} active, #{Server.inactive_count} inactive" )
+    Slackiq.notify(webhook_name: :web_scrapes, status: status, title: 'Scrape Completed!', 
+    'Total URLs in DB' => URL.count.to_s, 
+    'Servers' => "#{Server.active_count} active, #{Server.inactive_count} inactive")
   end
   
 end
 ```
+
+Note that in this case, `'Total URLs in DB'` and `'Servers'` are custom fields that will also appear in Slack!
 
 ## Contributing
 
