@@ -22,6 +22,13 @@ module Slackiq
       title = options[:title]
       #description = options[:description]
       status = options[:status]
+      
+      if (bid = options[:bid]) && status.nil?
+        raise "Sidekiq::Batch::Status is not defined. Are you sure Sidekiq Pro is set up correctly?" unless defined?(Sidekiq::Batch::Status)
+        
+        status = Sidekiq::Batch::Status.new(bid)
+      end
+      
       extra_fields = options.except(:webhook_name, :title, :description, :status)
       
       if status
