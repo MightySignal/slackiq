@@ -28,8 +28,10 @@ You can call `notify` to send a nicely-formatted notification to your Slack.
 The `notify` method has a single Hash parameter. Here are the keys and values in the Hash:
 * `:webhook_name` The name of the webhook (Symbol) that you configured (eg. `:main` or `:data_processing`)
 * `:title` The title of the notification (String)
-* `:status` An instance of `Sidekiq::Batch::Status` (see [this link](https://github.com/mperham/sidekiq/wiki/Batches) for more info)
+* `:status` An instance of `Sidekiq::Batch::Status`
 * Any other keys and values (both Strings) can be added too, and they'll be added to the Slack notification!
+
+If you haven't used batches with Sidekiq Pro before, [read this first](https://github.com/mperham/sidekiq/wiki/Batches).
 
 Here's an example showing how you would use Slackiq to send a notification to your Slack when your Sidekiq batch completes:
 
