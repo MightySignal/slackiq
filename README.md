@@ -10,6 +10,10 @@ Add this line to your Gemfile:
 
 `gem 'slackiq'`
 
+Then run:
+
+`bundle install`
+
 ## Configuration
 
 First, set up any number of Slack Incoming Webhooks [from your Slack](https://slack.com/services/new/incoming-webhook).
@@ -21,12 +25,17 @@ Slackiq.configure( web_scrapes: 'https://hooks.slack.com/services/HA298HF2/ALSKF
                    data_processing: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423')
 ```
 
+`:web_scrapes` and `data_processing` are examples of keys. Use whatever keys you want.
+
 ## Usage
 
-You can call `notify` to send a nicely-formatted notification to your Slack.
+You can call `notify` to send a nicely-formatted notification to your Slack. You can call `notify`
+
+* Inside the Sidekiq Pro `on_success` or `on_complete` callbacks 
+* From inside a Sidekiq worker while it's running, in which case you should pass in the `bid` to the `perform` method of the worker
 
 The `notify` method has a single Hash parameter. Here are the keys and values in the Hash:
-* `:webhook_name` The name of the webhook (Symbol) that you configured (eg. `:main` or `:data_processing`)
+* `:webhook_name` The name of the webhook (Symbol) that you configured (eg. `:web_scrapes` or `:data_processing`)
 * `:title` The title of the notification (String)
 * `:status` An instance of `Sidekiq::Batch::Status`
 * Any other keys and values (both Strings) can be added too, and they'll be added to the Slack notification!
