@@ -6,17 +6,21 @@ require 'httparty'
 
 require 'slackiq/time_helper'
 
-require 'active_support/core_ext' #for Hash#except
+require 'active_support' #for Hash#except
 
 module Slackiq
   
   class << self
     
+    # Configure all of the webhook URLs you're going to use
+    # @author Jason Lew
     def configure(webhook_urls={})
       raise 'Argument must be a Hash' unless webhook_urls.class == Hash
       @@webhook_urls = webhook_urls
     end
     
+    # Send a notification to Slack with Sidekiq info about the batch
+    # @author Jason Lew
     def notify(options={})  
       url = @@webhook_urls[options[:webhook_name]]
       title = options[:title]
@@ -53,60 +57,60 @@ module Slackiq
       
       fields =  [
                   {
-                    "title" => "Created",
-                    "value" => Slackiq::TimeHelper.format(created_at),
-                    "short" => true
+                    'title' => 'Created',
+                    'value' => Slackiq::TimeHelper.format(created_at),
+                    'short' => true
                   },
                   {
-                    "title" => time_now_title,
-                    "value" => Slackiq::TimeHelper.format(time_now),
-                    "short" => true
+                    'title' => time_now_title,
+                    'value' => Slackiq::TimeHelper.format(time_now),
+                    'short' => true
                   },
                   {
-                    "title" => "Duration",
-                    "value" => duration,
-                    "short" => true
+                    'title' => "Duration",
+                    'value' => duration,
+                    'short' => true
                   },
                   {
-                    "title" => "Total Jobs",
-                    "value" => total_jobs,
-                    "short" => true
+                    'title' => "Total Jobs",
+                    'value' => total_jobs,
+                    'short' => true
                   },
                   {
-                    "title" => "Jobs Run",
-                    "value" => jobs_run,
-                    "short" => true
+                    'title' => "Jobs Run",
+                    'value' => jobs_run,
+                    'short' => true
                   },
                   {
-                    "title" => "Completion %",
-                    "value" => "#{completion_percentage}%",
-                    "short" => true
+                    'title' => "Completion %",
+                    'value' => "#{completion_percentage}%",
+                    'short' => true
                   },
                   {
-                    "title" => "Failures",
-                    "value" => status.failures,
-                    "short" => true
+                    'title' => "Failures",
+                    'value' => status.failures,
+                    'short' => true
                   },
                   {
-                    "title" => "Failure %",
-                    "value" => "#{failure_percentage}%",
-                    "short" => true
+                    'title' => "Failure %",
+                    'value' => "#{failure_percentage}%",
+                    'short' => true
                   },
                 ]
       
       # add extra fields
       fields += extra_fields.map do |title, value|
         {
-          "title" => title,
-          "value" => value,
-          "short" => false
+          'title' => title,
+          'value' => value,
+          'short' => false
         }
       end
                 
       attachments = 
       [
         {
-          "fallback" => "Sidekiq Batch Completed! (#{description})",
+          'fallback' => "Sidekiq Batch Completed! (#{description})",
 
           'color' => '#00ff66',
 
@@ -119,6 +123,16 @@ module Slackiq
     ]
     
       body = {attachments: attachments}.to_json
+      
+      HTTParty.post(url, body: body)
+    end
+
+    # Send a notification without Sidekiq batch info
+    # @author Jason Lew
+    def send(message, options)
+      url = @@webhook_urls[options[:webhook_name]]
+
+      body = { 'text' => message }.to_json
       
       HTTParty.post(url, body: body)
     end
