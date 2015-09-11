@@ -77,6 +77,14 @@ end
 
 Note that in this case, `'Total URLs in DB'` and `'Servers'` are custom fields that will also appear in Slack!
 
+### Want to send a message to Slack that isn't Sidekiq-related?
+
+No prob. Just: 
+
+```
+Slackiq.send('Server 5 is overloaded!', webhook_name: :data_processing)
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/MightySignal/slackiq. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
