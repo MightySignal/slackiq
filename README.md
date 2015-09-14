@@ -1,6 +1,6 @@
 # Slackiq
 
-Slackiq integrates [Slack](https://slack.com/) and [Sidekiq Pro](http://sidekiq.org/pro/) so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
+Slackiq integrates [Slack](https://slack.com/) and [Sidekiq](http://sidekiq.org) so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
 
 ![demo](http://i.imgur.com/4NLq2rP.gif)
 
@@ -31,7 +31,7 @@ Slackiq.configure( web_scrapes: 'https://hooks.slack.com/services/HA298HF2/ALSKF
 
 You can call `notify` to send a nicely-formatted notification to your Slack. You can call `notify`
 
-* Inside the Sidekiq Pro `on_success` or `on_complete` callbacks 
+* Inside the Sidekiq Pro `on_success` or `on_complete` callback (not available on regular Sidekiq--only Pro)
 * From inside a Sidekiq worker while it's running, in which case you should pass in the `bid` to the `perform` method of the worker
 
 The `notify` method has a single Hash parameter. Here are the keys and values in the Hash:
