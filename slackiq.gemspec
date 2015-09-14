@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Jason Lew']
   spec.email         = ['jason@mightysignal.com']
   spec.summary       = 'MightySignal: Slack and Sidekiq Pro integration'
-  spec.description   = "Slackiq (by MightySignal) integrates Slack and Sidekiq Pro so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack."
+  spec.description   = "Slackiq (by MightySignal) integrates Slack and Sidekiq so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack."
   spec.homepage      = 'https://github.com/MightySignal/slackiq'
   spec.license       = 'MIT'
 
