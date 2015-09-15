@@ -82,7 +82,7 @@ Note that in this case, `'Total URLs in DB'` and `'Servers'` are custom fields t
 No prob. Just: 
 
 ```
-Slackiq.send('Server 5 is overloaded!', webhook_name: :data_processing)
+Slackiq.message('Server 5 is overloaded!', webhook_name: :data_processing)
 ```
 
 ## Contributing
