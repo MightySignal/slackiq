@@ -129,10 +129,10 @@ module Slackiq
 
     # Send a notification without Sidekiq batch info
     # @author Jason Lew
-    def send(message, options)
+    def message(text, options)
       url = @@webhook_urls[options[:webhook_name]]
 
-      body = { 'text' => message }.to_json
+      body = { 'text' => text }.to_json
       
       HTTParty.post(url, body: body)
     end
