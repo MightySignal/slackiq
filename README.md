@@ -44,7 +44,7 @@ If you haven't used batches with Sidekiq Pro before, [read this first](https://g
 
 Here's an example showing how you would use Slackiq to send a notification to your Slack when your Sidekiq batch completes:
 
-```
+```ruby
 class WebScraper
   
   class << self
