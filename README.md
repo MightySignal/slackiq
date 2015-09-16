@@ -8,11 +8,15 @@ Slackiq integrates [Slack](https://slack.com/) and [Sidekiq](http://sidekiq.org)
 
 Add this line to your Gemfile:
 
-`gem 'slackiq'`
+```ruby
+gem 'slackiq'
+```
 
 Then run:
 
-`bundle install`
+```
+bundle install
+```
 
 ## Configuration
 
@@ -81,7 +85,7 @@ Note that in this case, `'Total URLs in DB'` and `'Servers'` are custom fields t
 
 No prob. Just: 
 
-```
+```ruby
 Slackiq.message('Server 5 is overloaded!', webhook_name: :data_processing)
 ```
 
