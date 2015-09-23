@@ -1,7 +1,7 @@
 # Slackiq 
 [![Gem Version](https://badge.fury.io/rb/slackiq.svg)](http://badge.fury.io/rb/slackiq)
 
-Slackiq (pronounced **slack-kick**) integrates [Slack](https://slack.com/) and [Sidekiq](http://sidekiq.org) so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
+Slackiq (pronounced *slack-kick*) integrates [Slack](https://slack.com/) and [Sidekiq](http://sidekiq.org) so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
 
 ![demo](http://i.imgur.com/4NLq2rP.gif)
 
