@@ -103,3 +103,7 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 https://medium.com/@MightySignal/slackiq-a-ruby-gem-that-connects-slack-and-sidekiq-a2308c1974b7
 
+## More Open Source Projects
+
+### [Slacktivity](https://github.com/MightySignal/slacktivity)
+
