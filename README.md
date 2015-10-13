@@ -105,5 +105,5 @@ https://medium.com/@MightySignal/slackiq-a-ruby-gem-that-connects-slack-and-side
 
 ## More Open Source Projects
 
-### [Slacktivity](https://github.com/MightySignal/slacktivity)
+* [Slacktivity](https://github.com/MightySignal/slacktivity)
 
