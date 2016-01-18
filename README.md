@@ -1,6 +1,7 @@
-# Slackiq
+# Slackiq 
+[![Gem Version](https://badge.fury.io/rb/slackiq.svg)](http://badge.fury.io/rb/slackiq)
 
-Slackiq integrates [Slack](https://slack.com/) and [Sidekiq](http://sidekiq.org) so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
+Slackiq (pronounced *slack-kick*) integrates [Slack](https://slack.com/) and [Sidekiq](http://sidekiq.org) so that you can have vital information about your Sidekiq jobs sent directly to your team's Slack.
 
 ![demo](http://i.imgur.com/4NLq2rP.gif)
 
@@ -8,11 +9,15 @@ Slackiq integrates [Slack](https://slack.com/) and [Sidekiq](http://sidekiq.org)
 
 Add this line to your Gemfile:
 
-`gem 'slackiq'`
+```ruby
+gem 'slackiq'
+```
 
 Then run:
 
-`bundle install`
+```
+bundle install
+```
 
 ## Configuration
 
@@ -20,7 +25,7 @@ First, set up any number of Slack Incoming Webhooks [from your Slack](https://sl
 
 Then, you only need to call the `configure` method when your application launches to configure all of the webhooks to which you want to post. If you're using Rails, create an initializer at `config/initializers/slackiq.rb`. Here's an example:
 
-```
+```ruby
 Slackiq.configure( web_scrapes: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND', 
                    data_processing: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423')
 ```
@@ -44,7 +49,7 @@ If you haven't used batches with Sidekiq Pro before, [read this first](https://g
 
 Here's an example showing how you would use Slackiq to send a notification to your Slack when your Sidekiq batch completes:
 
-```
+```ruby
 class WebScraper
   
   class << self
@@ -81,7 +86,7 @@ Note that in this case, `'Total URLs in DB'` and `'Servers'` are custom fields t
 
 No prob. Just: 
 
-```
+```ruby
 Slackiq.message('Server 5 is overloaded!', webhook_name: :data_processing)
 ```
 
@@ -97,4 +102,8 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## Blog Post about Slackiq
 
 https://medium.com/@MightySignal/slackiq-a-ruby-gem-that-connects-slack-and-sidekiq-a2308c1974b7
+
+## More Open Source Projects
+
+* [Slacktivity](https://github.com/MightySignal/slacktivity)
 
