@@ -47,10 +47,14 @@ module Slackiq
         total_jobs = status.total
         failures = status.failures
         jobs_run = total_jobs - status.pending
-      
+
         completion_percentage = (jobs_run/total_jobs.to_f)*100
-        
         failure_percentage = (failures/total_jobs.to_f)*100 if total_jobs && failures
+
+        # round to two decimal places
+        decimal_places = 2
+        completion_percentage = completion_percentage.round(decimal_places)
+        failure_percentage = failure_percentage.round(decimal_places)
         
         description = status.description
       end
