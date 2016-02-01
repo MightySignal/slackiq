@@ -34,6 +34,8 @@ module Slackiq
       end
       
       extra_fields = options.except(:webhook_name, :title, :description, :status)
+
+      fields = []
       
       if status
         created_at = status.created_at
@@ -57,50 +59,52 @@ module Slackiq
         failure_percentage = failure_percentage.round(decimal_places)
         
         description = status.description
+
+        fields += [
+                    {
+                      'title' => 'Created',
+                      'value' => Slackiq::TimeHelper.format(created_at),
+                      'short' => true
+                    },
+                    {
+                      'title' => time_now_title,
+                      'value' => Slackiq::TimeHelper.format(time_now),
+                      'short' => true
+                    },
+                    {
+                      'title' => "Duration",
+                      'value' => duration,
+                      'short' => true
+                    },
+                    {
+                      'title' => "Total Jobs",
+                      'value' => total_jobs,
+                      'short' => true
+                    },
+                    {
+                      'title' => "Jobs Run",
+                      'value' => jobs_run,
+                      'short' => true
+                    },
+                    {
+                      'title' => "Completion %",
+                      'value' => "#{completion_percentage}%",
+                      'short' => true
+                    },
+                    {
+                      'title' => "Failures",
+                      'value' => status.failures,
+                      'short' => true
+                    },
+                    {
+                      'title' => "Failure %",
+                      'value' => "#{failure_percentage}%",
+                      'short' => true
+                    },
+                  ]
       end
       
-      fields =  [
-                  {
-                    'title' => 'Created',
-                    'value' => Slackiq::TimeHelper.format(created_at),
-                    'short' => true
-                  },
-                  {
-                    'title' => time_now_title,
-                    'value' => Slackiq::TimeHelper.format(time_now),
-                    'short' => true
-                  },
-                  {
-                    'title' => "Duration",
-                    'value' => duration,
-                    'short' => true
-                  },
-                  {
-                    'title' => "Total Jobs",
-                    'value' => total_jobs,
-                    'short' => true
-                  },
-                  {
-                    'title' => "Jobs Run",
-                    'value' => jobs_run,
-                    'short' => true
-                  },
-                  {
-                    'title' => "Completion %",
-                    'value' => "#{completion_percentage}%",
-                    'short' => true
-                  },
-                  {
-                    'title' => "Failures",
-                    'value' => status.failures,
-                    'short' => true
-                  },
-                  {
-                    'title' => "Failure %",
-                    'value' => "#{failure_percentage}%",
-                    'short' => true
-                  },
-                ]
+      
       
       # add extra fields
       fields += extra_fields.map do |title, value|
