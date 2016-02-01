@@ -60,7 +60,7 @@ module Slackiq
         
         description = status.description
 
-        fields =  [
+        fields += [
                     {
                       'title' => 'Created',
                       'value' => Slackiq::TimeHelper.format(created_at),
