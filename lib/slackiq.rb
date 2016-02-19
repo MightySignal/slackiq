@@ -118,7 +118,7 @@ module Slackiq
       attachments = 
       [
         {
-          'fallback' => "Sidekiq Batch Completed! (#{description})",
+          'fallback' => title,
 
           'color' => '#00ff66',
 
