@@ -11,12 +11,12 @@ require 'active_support' #for Hash#except
 module Slackiq
   
   class << self
-    
     # Configure all of the webhook URLs you're going to use
     # @author Jason Lew
-    def configure(webhook_urls={})
-      raise 'Argument must be a Hash' unless webhook_urls.class == Hash
+    def configure(webhook_urls={}, proxy_opts={})
+      raise 'Arguments must be a Hash' unless webhook_urls.class == Hash && proxy_opts.class == Hash
       @@webhook_urls = webhook_urls
+      @@proxy_opts = proxy_opts
     end
     
     # Send a notification to Slack with Sidekiq info about the batch
@@ -131,8 +131,13 @@ module Slackiq
     ]
     
       body = {attachments: attachments}.to_json
-      
-      HTTParty.post(url, body: body)
+
+      HTTParty.post(url, body: body,
+                    http_proxyaddr: @@proxy_opts[:url],
+                    http_proxyport: @@proxy_opts[:port],
+                    http_proxyuser: @@proxy_opts[:user],
+                    http_proxypass: @@proxy_opts[:password]
+      )
     end
 
     # Send a notification without Sidekiq batch info
@@ -141,8 +146,13 @@ module Slackiq
       url = @@webhook_urls[options[:webhook_name]]
 
       body = { 'text' => text }.to_json
-      
-      HTTParty.post(url, body: body)
+
+      HTTParty.post(url, body: body,
+                    http_proxyaddr: @@proxy_opts[:url],
+                    http_proxyport: @@proxy_opts[:port],
+                    http_proxyuser: @@proxy_opts[:user],
+                    http_proxypass: @@proxy_opts[:password]
+      )
     end
     
   end

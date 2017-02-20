@@ -26,11 +26,27 @@ First, set up any number of Slack Incoming Webhooks [from your Slack](https://sl
 Then, you only need to call the `configure` method when your application launches to configure all of the webhooks to which you want to post. If you're using Rails, create an initializer at `config/initializers/slackiq.rb`. Here's an example:
 
 ```ruby
-Slackiq.configure( web_scrapes: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND', 
-                   data_processing: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423')
+Slackiq.configure( {web_scrapes: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND', 
+                   data_processing: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423'})
 ```
 
 `:web_scrapes` and `data_processing` are examples of keys. Use whatever keys you want.
+
+If you need to use a proxy, `configure` takes a second hash as a parameter to set the proxy settings:
+
+```ruby
+Slackiq.configure( {
+    web_scrapes: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND', 
+    data_processing: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423'
+  },
+  {
+    url: 'your-proxy.company.com',
+    port: 8080,
+    username: 'yourname',
+    password: 'password'
+  }
+)
+```
 
 ## Usage
 
