@@ -26,12 +26,13 @@ module Slackiq
       title = options[:title]
       # description = options[:description]
       status = options[:status]
-      color = options[:color] || color_for(status)
 
       if (bid = options[:bid]) && status.nil?
         raise "Sidekiq::Batch::Status is not defined. Are you sure Sidekiq Pro is set up correctly?" unless defined?(Sidekiq::Batch::Status)
         status = Sidekiq::Batch::Status.new(bid)
       end
+
+      color = options[:color] || color_for(status)
 
       extra_fields = options.except(:webhook_name, :title, :description, :status)
 
@@ -138,10 +139,14 @@ module Slackiq
 
   private
     def color_for(status)
-      case status
-      when :success then '#1C9513'
-      when :failure then '#FF0000'
-      else               '#FBBD08'
+      if status.total == 0
+        '#FBBD08'  # yellow
+      else if status.failures > 0
+        '#FF0000'  # red
+      else if status.failures == 0
+        '#1C9513'  # green
+      else
+        '#FBBD08'  # yellow
       end
     end
   end
