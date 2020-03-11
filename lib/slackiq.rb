@@ -25,8 +25,8 @@ module Slackiq
       url = @@webhook_urls[options[:webhook_name]]
       title = options[:title]
       # description = options[:description]
-      color = options[:color] || color_for(status)
       status = options[:status]
+      color = options[:color] || color_for(status)
 
       if (bid = options[:bid]) && status.nil?
         raise "Sidekiq::Batch::Status is not defined. Are you sure Sidekiq Pro is set up correctly?" unless defined?(Sidekiq::Batch::Status)
