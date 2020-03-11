@@ -141,9 +141,9 @@ module Slackiq
     def color_for(status)
       if status.total == 0
         '#FBBD08'  # yellow
-      else if status.failures > 0
+      elsif status.failures > 0
         '#FF0000'  # red
-      else if status.failures == 0
+      elsif status.failures == 0
         '#1C9513'  # green
       else
         '#FBBD08'  # yellow
