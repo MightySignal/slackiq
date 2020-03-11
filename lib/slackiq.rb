@@ -28,7 +28,10 @@ module Slackiq
       status = options[:status]
 
       if (bid = options[:bid]) && status.nil?
-        raise "Sidekiq::Batch::Status is not defined. Are you sure Sidekiq Pro is set up correctly?" unless defined?(Sidekiq::Batch::Status)
+        raise <<~EOT.chomp unless defined?(Sidekiq::Batch::Status)
+                 Sidekiq::Batch::Status is not defined. \
+                 Are you sure Sidekiq Pro is set up correctly?
+                 EOT
         status = Sidekiq::Batch::Status.new(bid)
       end
 
