@@ -6,15 +6,17 @@ if defined?(RSpec)
 
   module RSpec
     module Sidekiq
-      class FailureStatus < NullStatus
-        def failures
-          1
+      class Batch
+        class FailureStatus < NullStatus
+          def failures
+            1
+          end
         end
-      end
 
-      class SuccessStatus < NullStatus
-        def failures
-          0
+        class SuccessStatus < NullStatus
+          def failures
+            0
+          end
         end
       end
     end
