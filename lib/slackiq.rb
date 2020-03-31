@@ -5,6 +5,7 @@ require 'json'
 require 'httparty'
 
 require 'slackiq/time_helper'
+require 'slackiq/sidekiq_status'
 
 require 'active_support' # For Hash#except
 
