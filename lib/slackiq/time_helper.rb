@@ -1,4 +1,4 @@
-require 'date'
+require "date"
 
 module Slackiq
   module TimeHelper
@@ -26,11 +26,11 @@ module Slackiq
               "#{n.to_i}#{name}"
             end
           end
-        }.compact.reverse.join(' ')
+        }.compact.reverse.join(" ")
       end
 
       def format(time)
-        time.strftime('%D @ %r').gsub('PM', 'pm').gsub('AM', 'am')
+        time.strftime("%D @ %r").gsub("PM", "pm").gsub("AM", "am")
       end
     end
   end

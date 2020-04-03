@@ -10,7 +10,7 @@ Slackiq (pronounced *slack-kick*) integrates [Slack](https://slack.com/) and [Si
 Add this line to your Gemfile:
 
 ```ruby
-gem 'slackiq'
+gem "slackiq"
 ```
 
 Then run:
@@ -26,8 +26,8 @@ First, set up any number of Slack Incoming Webhooks [from your Slack](https://sl
 Then, you only need to call the `configure` method when your application launches to configure all of the webhooks to which you want to post. If you're using Rails, create an initializer at `config/initializers/slackiq.rb`. Here's an example:
 
 ```ruby
-Slackiq.configure( web_scrapes: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND',
-                   data_processing: 'https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423')
+Slackiq.configure( web_scrapes: "https://hooks.slack.com/services/HA298HF2/ALSKF2451/lknsaHHA2323KKDKND",
+                   data_processing: "https://hooks.slack.com/services/HA298HF2/ALSKF2451/H24dLKAHD22423")
 ```
 
 `:web_scrapes` and `data_processing` are examples of keys. Use whatever keys you want.
@@ -57,7 +57,7 @@ class WebScraper
     # Scrape the first 100 URLs in the database
     def scrape_100
       batch = Sidekiq::Batch.new
-      batch.description = 'Scrape the first 100 URLs!'
+      batch.description = "Scrape the first 100 URLs!"
       batch.on(:complete, self)
 
       batch.jobs do
@@ -72,22 +72,22 @@ class WebScraper
   end
 
   def on_complete(status, options)
-    Slackiq.notify(webhook_name: :web_scrapes, status: status, title: 'Scrape Completed!',
-    'Total URLs in DB' => URL.count.to_s,
-    'Servers' => "#{Server.active_count} active, #{Server.inactive_count} inactive")
+    Slackiq.notify(webhook_name: :web_scrapes, status: status, title: "Scrape Completed!",
+    "Total URLs in DB" => URL.count.to_s,
+    "Servers" => "#{Server.active_count} active, #{Server.inactive_count} inactive")
   end
 
 end
 ```
 
-Note that in this case, `'Total URLs in DB'` and `'Servers'` are custom fields that will also appear in Slack!
+Note that in this case, `"Total URLs in DB"` and `"Servers"` are custom fields that will also appear in Slack!
 
 ### Want to send a message to Slack that isn't Sidekiq-related?
 
 No prob. Just:
 
 ```ruby
-Slackiq.message('Server 5 is overloaded!', webhook_name: :data_processing)
+Slackiq.message("Server 5 is overloaded!", webhook_name: :data_processing)
 ```
 
 ## Contributing

@@ -1,13 +1,12 @@
-require 'slackiq/version'
+require "slackiq/version"
 
-require 'net/http'
-require 'json'
-require 'httparty'
+require "net/http"
+require "json"
+require "httparty"
 
-require 'slackiq/time_helper'
-require 'slackiq/sidekiq_status'
+require "slackiq/time_helper"
 
-require 'active_support' # For Hash#except
+require "active_support" # For Hash#except
 
 module Slackiq
 
@@ -16,7 +15,7 @@ module Slackiq
     # Configure all of the webhook URLs you're going to use
     # @author Jason Lew
     def configure(webhook_urls={})
-      raise 'Argument must be a Hash' unless webhook_urls.class == Hash
+      raise "Argument must be a Hash" unless webhook_urls.class == Hash
       @@webhook_urls = webhook_urls
     end
 
@@ -48,7 +47,7 @@ module Slackiq
         if created_at
           time_now = Time.now
           duration = Slackiq::TimeHelper.elapsed_time_humanized(created_at, time_now)
-          time_now_title = (status.complete? ? 'Completed' : 'Now')
+          time_now_title = (status.complete? ? "Completed" : "Now")
         end
 
         total_jobs = status.total
@@ -67,44 +66,44 @@ module Slackiq
 
         fields += [
           {
-            'title' => 'Created',
-            'value' => Slackiq::TimeHelper.format(created_at),
-            'short' => true
+            title: "Created",
+            value: Slackiq::TimeHelper.format(created_at),
+            short: true
           },
           {
-            'title' => time_now_title,
-            'value' => Slackiq::TimeHelper.format(time_now),
-            'short' => true
+            title: time_now_title,
+            value: Slackiq::TimeHelper.format(time_now),
+            short: true
           },
           {
-            'title' => "Duration",
-            'value' => duration,
-            'short' => true
+            title: "Duration",
+            value: duration,
+            short: true
           },
           {
-            'title' => "Total Jobs",
-            'value' => total_jobs,
-            'short' => true
+            title: "Total Jobs",
+            value: total_jobs,
+            short: true
           },
           {
-            'title' => "Jobs Run",
-            'value' => jobs_run,
-            'short' => true
+            title: "Jobs Run",
+            value: jobs_run,
+            short: true
           },
           {
-            'title' => "Completion %",
-            'value' => "#{completion_percentage}%",
-            'short' => true
+            title: "Completion %",
+            value: "#{completion_percentage}%",
+            short: true
           },
           {
-            'title' => "Failures",
-            'value' => status.failures,
-            'short' => true
+            title: "Failures",
+            value: status.failures,
+            short: true
           },
           {
-            'title' => "Failure %",
-            'value' => "#{failure_percentage}%",
-            'short' => true
+            title: "Failure %",
+            value: "#{failure_percentage}%",
+            short: true
           },
         ]
       end
@@ -112,19 +111,19 @@ module Slackiq
       # Add extra fields
       fields += extra_fields.map do |title, value|
         {
-          'title' => title,
-          'value' => value,
-          'short' => false
+          title: title,
+          value: value,
+          short: false
         }
       end
 
       attachments = [
         {
-          'fallback' => title,
-          'color' => color,
-          'title' => title,
-          'text' => description,
-          'fields' => fields,
+          fallback: title,
+          color:    color,
+          title:    title,
+          text:     description,
+          fields:   fields,
         }
       ]
 
@@ -137,20 +136,20 @@ module Slackiq
     # @author Jason Lew
     def message(text, options)
       url = @@webhook_urls[options[:webhook_name]]
-      body = { 'text' => text }.to_json
+      body = { text: text }.to_json
       HTTParty.post(url, body: body)
     end
 
   private
     def color_for(status)
       if status.total == 0
-        '#FBBD08'  # yellow
+        "#FBBD08"  # yellow
       elsif status.failures > 0
-        '#FF0000'  # red
+        "#FF0000"  # red
       elsif status.failures == 0
-        '#1C9513'  # green
+        "#1C9513"  # green
       else
-        '#FBBD08'  # yellow
+        "#FBBD08"  # yellow
       end
     end
   end
