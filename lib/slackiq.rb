@@ -54,7 +54,7 @@ class Slackiq
     fields = [
       {
         title: "Created",
-        value: time_format(created_at),
+        value: time_format(status.created_at),
         short: true
       },
       {
