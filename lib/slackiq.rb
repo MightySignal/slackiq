@@ -43,7 +43,7 @@ class Slackiq
 
     color = options[:color] || color_for(status)
 
-    duration  = Slackiq::TimeHelper.elapsed_time_humanized(status.created_at, time_now)
+    duration  = elapsed_time_humanized(status.created_at, time_now)
     time_now_title = (status.complete? ? "Completed" : "Now")
 
     jobs_run = status.total - status.pending
