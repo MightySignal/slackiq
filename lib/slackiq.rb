@@ -1,156 +1,188 @@
-require "slackiq/version"
-
 require "net/http"
+require "uri"
 require "json"
-require "httparty"
+require "date"
 
-require "slackiq/time_helper"
+class Slackiq
 
-require "active_support" # For Hash#except
+  VERSION = "1.2.1".freeze
 
-module Slackiq
+  attr_reader :options
 
-  class << self
+  # @param options [Hash]
+  def self.notify(options)
+    new(options).execute
+  end
 
-    # Configure all of the webhook URLs you're going to use
-    # @author Jason Lew
-    def configure(webhook_urls={})
-      raise "Argument must be a Hash" unless webhook_urls.class == Hash
-      @@webhook_urls = webhook_urls
+  # @param options [Hash]
+  def self.configure(webhook_urls={})
+    @@webhook_urls = webhook_urls
+  end
+
+  # @param options [Hash]
+  def initialize(options)
+    @options = options
+  end
+
+  # Send a notification to Slack with Sidekiq info about the batch
+  def execute
+    time_now = Time.now
+
+    title    = options[:title]
+    status   = options[:status]
+
+    if (bid = options[:bid]) && status.nil?
+      raise <<~EOT.chomp unless defined?(Sidekiq::Batch::Status)
+               Sidekiq::Batch::Status is not defined. \
+               Are you sure Sidekiq Pro is set up correctly?
+               EOT
+      status = Sidekiq::Batch::Status.new(bid)
     end
 
-    # Send a notification to Slack with Sidekiq info about the batch
-    # @author Jason Lew
-    def notify(options={})
-      url = @@webhook_urls[options[:webhook_name]]
-      title = options[:title]
-      # description = options[:description]
-      status = options[:status]
+    return if status.nil?
 
-      if (bid = options[:bid]) && status.nil?
-        raise <<~EOT.chomp unless defined?(Sidekiq::Batch::Status)
-                 Sidekiq::Batch::Status is not defined. \
-                 Are you sure Sidekiq Pro is set up correctly?
-                 EOT
-        status = Sidekiq::Batch::Status.new(bid)
-      end
+    color = options[:color] || color_for(status)
 
-      color = options[:color] || color_for(status)
+    duration  = Slackiq::TimeHelper.elapsed_time_humanized(status.created_at, time_now)
+    time_now_title = (status.complete? ? "Completed" : "Now")
 
-      extra_fields = options.except(:webhook_name, :title, :description, :status)
+    jobs_run = status.total - status.pending
 
-      fields = []
+    completion_percentage = percentage(jobs_run        / status.total.to_f)
+    failure_percentage    = percentage(status.failures / status.total.to_f)
 
-      if status
-        created_at = status.created_at
+    fields = [
+      {
+        title: "Created",
+        value: time_format(created_at),
+        short: true
+      },
+      {
+        title: time_now_title,
+        value: time_format(time_now),
+        short: true
+      },
+      {
+        title: "Duration",
+        value: duration,
+        short: true
+      },
+      {
+        title: "Total Jobs",
+        value: status.total,
+        short: true
+      },
+      {
+        title: "Jobs Run",
+        value: jobs_run,
+        short: true
+      },
+      {
+        title: "Completion %",
+        value: completion_percentage,
+        short: true
+      },
+      {
+        title: "Failures",
+        value: status.failures,
+        short: true
+      },
+      {
+        title: "Failure %",
+        value: failure_percentage,
+        short: true
+      }
+    ]
 
-        if created_at
-          time_now = Time.now
-          duration = Slackiq::TimeHelper.elapsed_time_humanized(created_at, time_now)
-          time_now_title = (status.complete? ? "Completed" : "Now")
+    attachments = [
+      {
+        fallback: title,
+        title:    title,
+        text:     status.description,
+        fields:   fields,
+        color:    color
+      }
+    ]
+
+    body = { attachments: attachments }
+
+    http_post(body)
+  end
+
+  # @param data [Hash]
+  private def http_post(data)
+    url  = @@webhook_urls[options[:webhook_name]]
+    uri  = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.port == 443
+
+    header  = {"Content-Type": "application/json"}
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = data.to_json
+    http.request(request)
+  end
+
+  # @param number [Numeric]
+  # @param precision [Integer]
+  # @param multiply100 [Boolean]
+  private def percentage(number, precision: 2, multiply100: true)
+    number  = number * 100 if multiply100
+    rounded = number.to_f.round(precision)
+    format  = number == rounded.to_i ? "%.f" : "%.#{precision}f"
+    (format % rounded) + "%"
+  end
+
+  # @param status [Sidekiq::Batch::Status]
+  private def color_for(status)
+    colors = {
+      red:    "f00000",
+      yellow: "ffc000",
+      green:  "009800"
+    }
+
+    if status.total == 0
+      colors[:yellow]
+    elsif status.failures > 0
+      colors[:red]
+    elsif status.failures == 0
+      colors[:green]
+    else
+      colors[:yellow]
+    end
+  end
+
+  # @param t0 [DateTime]
+  # @param t1 [DateTime]
+  private def elapsed_time_humanized(t0, t1, precision: 2)
+    time_humanize(elapsed_seconds(t0, t1))
+  end
+
+  # @param t0 [DateTime]
+  # @param t1 [DateTime]
+  private def elapsed_seconds(t0, t1, precision: 2)
+    dt0 = t0.to_datetime
+    dt1 = t1.to_datetime
+    ((dt1 - dt0) * 24 * 60 * 60).to_f.round(precision)
+  end
+
+  # http://stackoverflow.com/questions/4136248/how-to-generate-a-human-readable-time-range-using-ruby-on-rails
+  # @param secs [Integer]
+  private def time_humanize(secs)
+    [[60, :s], [60, :m], [24, :h], [1000, :d]].map do |count, name|
+      if secs > 0
+        secs, n = secs.divmod(count)
+        if name == :s
+          num = n.to_f == n.to_i ? n.to_i : n.to_f
+          "%.2f#{name}" % [num]
+        else
+          "#{n.to_i}#{name}"
         end
-
-        total_jobs = status.total
-        failures = status.failures
-        jobs_run = total_jobs - status.pending
-
-        completion_percentage = (jobs_run/total_jobs.to_f)*100
-        failure_percentage = (failures/total_jobs.to_f)*100 if total_jobs && failures
-
-        # Round to two decimal places
-        decimal_places = 2
-        completion_percentage = completion_percentage.round(decimal_places)
-        failure_percentage = failure_percentage.round(decimal_places)
-
-        description = status.description
-
-        fields += [
-          {
-            title: "Created",
-            value: Slackiq::TimeHelper.format(created_at),
-            short: true
-          },
-          {
-            title: time_now_title,
-            value: Slackiq::TimeHelper.format(time_now),
-            short: true
-          },
-          {
-            title: "Duration",
-            value: duration,
-            short: true
-          },
-          {
-            title: "Total Jobs",
-            value: total_jobs,
-            short: true
-          },
-          {
-            title: "Jobs Run",
-            value: jobs_run,
-            short: true
-          },
-          {
-            title: "Completion %",
-            value: "#{completion_percentage}%",
-            short: true
-          },
-          {
-            title: "Failures",
-            value: status.failures,
-            short: true
-          },
-          {
-            title: "Failure %",
-            value: "#{failure_percentage}%",
-            short: true
-          },
-        ]
       end
+    end.compact.reverse.join(" ")
+  end
 
-      # Add extra fields
-      fields += extra_fields.map do |title, value|
-        {
-          title: title,
-          value: value,
-          short: false
-        }
-      end
-
-      attachments = [
-        {
-          fallback: title,
-          color:    color,
-          title:    title,
-          text:     description,
-          fields:   fields,
-        }
-      ]
-
-      body = { attachments: attachments }.to_json
-
-      HTTParty.post(url, body: body)
-    end
-
-    # Send a notification without Sidekiq batch info
-    # @author Jason Lew
-    def message(text, options)
-      url = @@webhook_urls[options[:webhook_name]]
-      body = { text: text }.to_json
-      HTTParty.post(url, body: body)
-    end
-
-  private
-    def color_for(status)
-      if status.total == 0
-        "#FBBD08"  # yellow
-      elsif status.failures > 0
-        "#FF0000"  # red
-      elsif status.failures == 0
-        "#1C9513"  # green
-      else
-        "#FBBD08"  # yellow
-      end
-    end
+  # @param time [DateTime]
+  private def time_format(time)
+    time.strftime("%D @ %H:%M:%S %P")
   end
 end
