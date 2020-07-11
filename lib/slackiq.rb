@@ -53,6 +53,16 @@ class Slackiq
 
     fields = [
       {
+        title: title,
+        value: status.description,
+        short: true
+      },
+      {
+        title: "Batch ID",
+        value: status.bid,
+        short: true
+      },
+      {
         title: "Created",
         value: time_format(status.created_at),
         short: true
@@ -94,18 +104,12 @@ class Slackiq
       }
     ]
 
-    attachments = [
-      {
-        fallback: title,
-        title:    title,
-        text:     status.description,
-        fields:   fields,
-        color:    color
-      }
-    ]
-
-    body = { attachments: attachments }
-
+    body = {
+      attachments: [
+        fields: fields,
+        color:  color
+      ]
+    }
     http_post(body)
   end
 
